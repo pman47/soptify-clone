@@ -1,5 +1,5 @@
 "use client";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import {
   useSupabaseClient,
   useSessionContext,
@@ -20,6 +20,13 @@ const AuthModal: FC<AuthModalProps> = ({}) => {
 
   const { onClose, isOpen } = useAuthModal();
 
+  useEffect(() => {
+    if (session) {
+      router.refresh();
+      onClose();
+    }
+  }, [session, router, onClose]);
+
   const onChange = (open: boolean) => {
     if (open) {
       onClose();
@@ -36,7 +43,7 @@ const AuthModal: FC<AuthModalProps> = ({}) => {
       <Auth
         theme="dark"
         magicLink
-        providers={["github"]}
+        providers={["google"]}
         supabaseClient={supabaseClient}
         appearance={{
           theme: ThemeSupa,
