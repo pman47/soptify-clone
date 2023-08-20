@@ -22,7 +22,12 @@ const UploadModal = () => {
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
 
-  const { register, handleSubmit, reset } = useForm<FieldValues>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FieldValues>({
     defaultValues: {
       author: "",
       title: "",
@@ -116,20 +121,30 @@ const UploadModal = () => {
       onChange={onChange}
     >
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
-        <Input
-          id="title"
-          type="text"
-          disabled={isLoading}
-          {...register("title", { required: true })}
-          placeholder="Song Title"
-        />
-        <Input
-          id="author"
-          type="text"
-          disabled={isLoading}
-          {...register("author", { required: true })}
-          placeholder="Song Author"
-        />
+        <div>
+          <Input
+            id="title"
+            type="text"
+            disabled={isLoading}
+            {...register("title", { required: true })}
+            placeholder="Song Title"
+          />
+          {errors?.title && errors?.title?.type === "required" && (
+            <div className="text-red-400 mt-1">Song title is required!</div>
+          )}
+        </div>
+        <div>
+          <Input
+            id="author"
+            type="text"
+            disabled={isLoading}
+            {...register("author", { required: true })}
+            placeholder="Song Author"
+          />
+          {errors?.title && errors?.title?.type === "required" && (
+            <div className="text-red-400 mt-1">Song author is required!</div>
+          )}
+        </div>
         <div>
           <div className="pb-1">Select a song file</div>
           <Input
@@ -139,6 +154,9 @@ const UploadModal = () => {
             accept="audio/*"
             {...register("song", { required: true })}
           />
+          {errors?.title && errors?.title?.type === "required" && (
+            <div className="text-red-400 mt-1">Please choose a song!</div>
+          )}
         </div>
         <div>
           <div className="pb-1">Select an image</div>
@@ -149,6 +167,9 @@ const UploadModal = () => {
             accept="image/*"
             {...register("image", { required: true })}
           />
+          {errors?.title && errors?.title?.type === "required" && (
+            <div className="text-red-400 mt-1">Please choose an image!</div>
+          )}
         </div>
         <Button disabled={isLoading} type="submit">
           Create
